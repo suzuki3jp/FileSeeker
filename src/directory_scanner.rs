@@ -77,3 +77,96 @@ pub struct ShallowScanResult {
     pub dirs: Vec<String>,
     pub files: Vec<String>,
 }
+
+#[cfg(test)]
+mod directory_scanner_tests {
+    use std::fs::{self, File};
+    use std::io::Write;
+    use tempfile::TempDir;
+    use FileSeeker::utils::path::convert_to_native_path;
+
+    use super::DirectoryScanner;
+
+    fn create_test_dir() -> TempDir {
+        let temp_dir = TempDir::new().unwrap();
+        let base_path = temp_dir.path();
+
+        fs::create_dir(base_path.join("dir1")).unwrap();
+        fs::create_dir(base_path.join("dir2")).unwrap();
+        fs::create_dir(base_path.join("dir1").join("subdir")).unwrap();
+
+        File::create(base_path.join("file1.txt"))
+            .unwrap()
+            .write_all(b"content")
+            .unwrap();
+        File::create(base_path.join("dir1").join("file2.txt"))
+            .unwrap()
+            .write_all(b"content")
+            .unwrap();
+        File::create(base_path.join("dir2").join("file3.txt"))
+            .unwrap()
+            .write_all(b"content")
+            .unwrap();
+        File::create(base_path.join("dir1").join("subdir").join("file4.txt"))
+            .unwrap()
+            .write_all(b"content")
+            .unwrap();
+
+        return temp_dir;
+    }
+
+    #[test]
+    fn test_new() {
+        let scanner = DirectoryScanner::new();
+        assert!(scanner.scan("".to_string()).is_err());
+    }
+
+    #[test]
+    fn test_scan() {
+        let temp_dir = create_test_dir();
+        let scanner = DirectoryScanner::new();
+
+        let result = scanner.scan(temp_dir.path().to_str().unwrap().to_string());
+        assert!(result.is_ok());
+
+        let files = result.unwrap();
+        assert_eq!(files.len(), 4); // 全てのファイルが見つかったか確認
+
+        let expected_files = vec![
+            "file1.txt",
+            "dir1/file2.txt",
+            "dir2/file3.txt",
+            "dir1/subdir/file4.txt",
+        ];
+
+        // 全ての期待されるファイルが含まれているか確認
+        for e in expected_files {
+            assert!(files
+                .iter()
+                .any(|f| f.ends_with(&convert_to_native_path(e))));
+        }
+    }
+    #[test]
+    fn test_shallow_scan() {
+        let temp_dir = create_test_dir();
+        let scanner = DirectoryScanner::new();
+
+        let result = scanner.shallow_scan(temp_dir.path().to_str().unwrap().to_string());
+        assert!(result.is_ok());
+
+        let scan_result = result.unwrap();
+        assert_eq!(scan_result.files.len(), 1); // ルートディレクトリに1つのファイル
+        assert_eq!(scan_result.dirs.len(), 2); // 2つのサブディレクトリ
+
+        assert!(scan_result.files.iter().any(|f| f.ends_with("file1.txt")));
+        assert!(scan_result.dirs.iter().any(|d| d.ends_with("dir1")));
+        assert!(scan_result.dirs.iter().any(|d| d.ends_with("dir2")));
+    }
+
+    #[test]
+    fn test_scan_non_existent_directory() {
+        let scanner = DirectoryScanner::new();
+        let result = scanner.scan("/path/to/non/existent/directory".to_string());
+        assert!(result.is_err());
+    }
+}
