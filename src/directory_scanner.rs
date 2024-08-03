@@ -69,7 +69,7 @@ impl DirectoryScanner {
     }
 
     fn dir_err(&self) -> io::Error {
-        return Error::new(io::ErrorKind::InvalidInput, "Target path is not directory.");
+        Error::new(io::ErrorKind::InvalidInput, "Target path is not directory.")
     }
 }
 
@@ -112,7 +112,7 @@ mod directory_scanner_tests {
             .write_all(b"content")
             .unwrap();
 
-        return temp_dir;
+        temp_dir
     }
 
     #[test]
