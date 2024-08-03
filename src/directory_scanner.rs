@@ -80,10 +80,10 @@ pub struct ShallowScanResult {
 
 #[cfg(test)]
 mod directory_scanner_tests {
+    use file_seeker::utils::path::convert_to_native_path;
     use std::fs::{self, File};
     use std::io::Write;
     use tempfile::TempDir;
-    use FileSeeker::utils::path::convert_to_native_path;
 
     use super::DirectoryScanner;
 

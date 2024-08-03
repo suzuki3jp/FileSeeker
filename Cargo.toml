@@ -1,5 +1,5 @@
 [package]
-name = "FileSeeker"
+name = "file_seeker"
 description = "A CLI application for analyzing directories and files."
 version = "0.1.0"
 edition = "2021"
