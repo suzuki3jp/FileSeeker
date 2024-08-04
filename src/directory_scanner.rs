@@ -2,6 +2,7 @@ use std::fs;
 use std::io;
 use std::io::Error;
 use std::path::Path;
+use std::path::PathBuf;
 
 pub struct DirectoryScanner {}
 
@@ -11,7 +12,7 @@ impl DirectoryScanner {
     }
 
     /// 指定ディレクトリのすべての階層をスキャンし、ファイルパスを収集する
-    pub fn scan(&self, path: String) -> io::Result<Vec<String>> {
+    pub fn scan(&self, path: &PathBuf) -> io::Result<Vec<PathBuf>> {
         let target = Path::new(&path);
 
         let mut file_paths = Vec::new();
@@ -22,7 +23,7 @@ impl DirectoryScanner {
                     file_paths.extend(result.files);
 
                     for dir in result.dirs {
-                        match self.scan(dir) {
+                        match self.scan(&dir) {
                             Ok(res) => file_paths.extend(res),
                             Err(e) => return Err(e),
                         }
@@ -37,7 +38,7 @@ impl DirectoryScanner {
     }
 
     /// 指定ディレクトリを**一階層のみ**スキャンし、ディレクトリパスとファイルパスを返却する
-    fn shallow_scan(&self, path: String) -> io::Result<ShallowScanResult> {
+    fn shallow_scan(&self, path: &PathBuf) -> io::Result<ShallowScanResult> {
         let target = Path::new(&path);
 
         let mut dir_paths = Vec::new();
@@ -50,11 +51,11 @@ impl DirectoryScanner {
 
                 if p.is_file() {
                     if let Some(path_str) = p.to_str() {
-                        file_paths.push(path_str.to_string())
+                        file_paths.push(PathBuf::from(path_str))
                     }
                 } else if p.is_dir() {
                     if let Some(path_str) = p.to_str() {
-                        dir_paths.push(path_str.to_string())
+                        dir_paths.push(PathBuf::from(path_str))
                     }
                 }
             }
@@ -74,8 +75,8 @@ impl DirectoryScanner {
 }
 
 pub struct ShallowScanResult {
-    pub dirs: Vec<String>,
-    pub files: Vec<String>,
+    pub dirs: Vec<PathBuf>,
+    pub files: Vec<PathBuf>,
 }
 
 #[cfg(test)]
@@ -83,6 +84,7 @@ mod directory_scanner_tests {
     use file_seeker::utils::path::convert_to_native_path;
     use std::fs::{self, File};
     use std::io::Write;
+    use std::path::PathBuf;
     use tempfile::TempDir;
 
     use super::DirectoryScanner;
@@ -118,7 +120,7 @@ mod directory_scanner_tests {
     #[test]
     fn test_new() {
         let scanner = DirectoryScanner::new();
-        assert!(scanner.scan("".to_string()).is_err());
+        assert!(scanner.scan(&PathBuf::from("")).is_err());
     }
 
     #[test]
@@ -126,7 +128,7 @@ mod directory_scanner_tests {
         let temp_dir = create_test_dir();
         let scanner = DirectoryScanner::new();
 
-        let result = scanner.scan(temp_dir.path().to_str().unwrap().to_string());
+        let result = scanner.scan(&temp_dir.path().to_path_buf());
         assert!(result.is_ok());
 
         let files = result.unwrap();
@@ -151,7 +153,7 @@ mod directory_scanner_tests {
         let temp_dir = create_test_dir();
         let scanner = DirectoryScanner::new();
 
-        let result = scanner.shallow_scan(temp_dir.path().to_str().unwrap().to_string());
+        let result = scanner.shallow_scan(&temp_dir.path().to_path_buf());
         assert!(result.is_ok());
 
         let scan_result = result.unwrap();
@@ -166,7 +168,7 @@ mod directory_scanner_tests {
     #[test]
     fn test_scan_non_existent_directory() {
         let scanner = DirectoryScanner::new();
-        let result = scanner.scan("/path/to/non/existent/directory".to_string());
+        let result = scanner.scan(&PathBuf::from("/path/to/non/existent/directory"));
         assert!(result.is_err());
     }
 }

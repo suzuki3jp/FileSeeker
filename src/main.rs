@@ -10,11 +10,11 @@ fn main() {
 
     let scanner = DirectoryScanner::new();
 
-    match scanner.scan(config.path.display().to_string()) {
+    match scanner.scan(&config.path) {
         Ok(files) => {
             println!("Found files:\n ");
             for f in files {
-                println!("{}", f)
+                println!("{}", f.to_string_lossy())
             }
         }
         Err(e) => println!("Error scanning dir: {}", e),
