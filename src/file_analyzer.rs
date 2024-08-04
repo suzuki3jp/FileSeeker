@@ -76,7 +76,7 @@ impl FileAnalyzer {
 }
 
 pub struct FileAnalysisResult {
-    /// "./path/to/my/file.txt" -> ["path", "to", "my", "file.txt"]
+    /// "./path/to/my/file.txt" -> [".", "path", "to", "my", "file.txt"]
     pub path_parts: Vec<String>,
 
     /// 拡張子

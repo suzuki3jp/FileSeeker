@@ -146,6 +146,7 @@ mod directory_scanner_tests {
             assert!(files.iter().any(|f| f.ends_with(convert_to_native_path(e))));
         }
     }
+
     #[test]
     fn test_shallow_scan() {
         let temp_dir = create_test_dir();
