@@ -91,3 +91,5 @@ pub struct FileAnalysisResult {
     /// ファイルサイズ（バイト単位）
     pub size: u64,
 }
+
+// TODO: Add tests
