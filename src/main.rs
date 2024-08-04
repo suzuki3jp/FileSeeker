@@ -1,9 +1,11 @@
 mod config;
 mod directory_scanner;
+mod file_analyzer;
 
 use clap::Parser;
 use config::{Cli, Config};
 use directory_scanner::DirectoryScanner;
+use file_analyzer::{FileAnalysisResult, FileAnalyzer};
 
 fn main() {
     let config = Config::new(Cli::parse());
@@ -14,7 +16,31 @@ fn main() {
         Ok(files) => {
             println!("Found files:\n ");
             for f in files {
-                println!("{}", f.to_string_lossy())
+                let analyzer = FileAnalyzer::new(&f);
+                let result = analyzer.analyze();
+
+                match result {
+                    Ok(r) => {
+                        let FileAnalysisResult {
+                            path_parts,
+                            extension,
+                            line,
+                            char,
+                            size,
+                        } = r;
+
+                        let content = format!(
+                            "{}, {}, {}, {}, {}",
+                            path_parts.join("/"),
+                            extension,
+                            line,
+                            char,
+                            size
+                        );
+                        println!("{}", content);
+                    }
+                    Err(e) => println!("Error analyzing file: {}", e),
+                }
             }
         }
         Err(e) => println!("Error scanning dir: {}", e),
