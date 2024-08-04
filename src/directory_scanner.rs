@@ -143,9 +143,7 @@ mod directory_scanner_tests {
 
         // 全ての期待されるファイルが含まれているか確認
         for e in expected_files {
-            assert!(files
-                .iter()
-                .any(|f| f.ends_with(&convert_to_native_path(e))));
+            assert!(files.iter().any(|f| f.ends_with(convert_to_native_path(e))));
         }
     }
     #[test]
