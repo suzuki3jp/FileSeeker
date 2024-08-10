@@ -4,11 +4,12 @@ use std::io::Error;
 use std::path::Path;
 use std::path::PathBuf;
 
+#[derive(Default)]
 pub struct DirectoryScanner {}
 
 impl DirectoryScanner {
     pub fn new() -> Self {
-        DirectoryScanner {}
+        Self::default()
     }
 
     /// 指定ディレクトリのすべての階層をスキャンし、ファイルパスを収集する
