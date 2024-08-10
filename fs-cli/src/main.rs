@@ -1,11 +1,9 @@
 mod config;
-mod directory_scanner;
-mod file_analyzer;
 
 use clap::Parser;
 use config::{Cli, Config};
-use directory_scanner::DirectoryScanner;
-use file_analyzer::{FileAnalysisResult, FileAnalyzer};
+use fs_core::directory_scanner::DirectoryScanner;
+use fs_core::file_analyzer::{FileAnalysisResult, FileAnalyzer};
 
 fn main() {
     let config = Config::new(Cli::parse());

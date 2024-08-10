@@ -81,11 +81,16 @@ pub struct ShallowScanResult {
 
 #[cfg(test)]
 mod directory_scanner_tests {
-    use file_seeker::utils::path::convert_to_native_path;
     use std::fs::{self, File};
     use std::io::Write;
     use std::path::PathBuf;
+    use std::path::MAIN_SEPARATOR;
     use tempfile::TempDir;
+
+    /// 実行環境に合わせたパスの区切り文字に変換するi
+    fn convert_to_native_path(path: &str) -> String {
+        path.replace("/", &String::from(MAIN_SEPARATOR))
+    }
 
     use super::DirectoryScanner;
 
