@@ -1,2 +1,2 @@
 [workspace]
-members = ["fs-core", "fs-cli", "fs-gui"]
+members = ["fs-core", "fs-cli", "fs-gui/src-tauri"]
