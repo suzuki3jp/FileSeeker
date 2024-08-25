@@ -1,52 +1,34 @@
-import { useState } from "react";
-import reactLogo from "./assets/react.svg";
-import { invoke } from "@tauri-apps/api/tauri";
-import "./App.css";
+import { ThemeProvider, createTheme, Grid, CssBaseline } from "@mui/material";
+import { FilePathInput } from "./components";
+
+const greyishDarkTheme = createTheme({
+  palette: {
+    mode: "dark",
+    background: {
+      default: "#303030", // より明るいグレー
+      paper: "#424242", // 少し明るいグレー（カード、ダイアログなどの背景）
+    },
+    text: {
+      primary: "#ffffff", // 白テキスト
+      secondary: "#b0b0b0", // 薄いグレーのテキスト
+    },
+    primary: {
+      main: "#90caf9", // 明るい青（アクセントカラー）
+    },
+    secondary: {
+      main: "#f48fb1", // ピンク（セカンダリーアクセントカラー）
+    },
+  },
+});
 
 function App() {
-  const [greetMsg, setGreetMsg] = useState("");
-  const [name, setName] = useState("");
-
-  async function greet() {
-    // Learn more about Tauri commands at https://tauri.app/v1/guides/features/command
-    setGreetMsg(await invoke("greet", { name }));
-  }
-
   return (
-    <div className="container">
-      <h1>Welcome to Tauri!</h1>
-
-      <div className="row">
-        <a href="https://vitejs.dev" target="_blank">
-          <img src="/vite.svg" className="logo vite" alt="Vite logo" />
-        </a>
-        <a href="https://tauri.app" target="_blank">
-          <img src="/tauri.svg" className="logo tauri" alt="Tauri logo" />
-        </a>
-        <a href="https://reactjs.org" target="_blank">
-          <img src={reactLogo} className="logo react" alt="React logo" />
-        </a>
-      </div>
-
-      <p>Click on the Tauri, Vite, and React logos to learn more.</p>
-
-      <form
-        className="row"
-        onSubmit={(e) => {
-          e.preventDefault();
-          greet();
-        }}
-      >
-        <input
-          id="greet-input"
-          onChange={(e) => setName(e.currentTarget.value)}
-          placeholder="Enter a name..."
-        />
-        <button type="submit">Greet</button>
-      </form>
-
-      <p>{greetMsg}</p>
-    </div>
+    <ThemeProvider theme={greyishDarkTheme}>
+      <CssBaseline />
+      <Grid container sx={{ padding: "1% 1% 1% 1%" }}>
+        <FilePathInput />
+      </Grid>
+    </ThemeProvider>
   );
 }
 
