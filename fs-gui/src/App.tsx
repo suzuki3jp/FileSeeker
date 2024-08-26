@@ -1,5 +1,5 @@
 import { ThemeProvider, createTheme, Grid, CssBaseline } from "@mui/material";
-import { FilePathInput } from "./components";
+import { ActionBar } from "./components";
 
 const greyishDarkTheme = createTheme({
   palette: {
@@ -26,7 +26,7 @@ function App() {
     <ThemeProvider theme={greyishDarkTheme}>
       <CssBaseline />
       <Grid container sx={{ padding: "1% 1% 1% 1%" }}>
-        <FilePathInput />
+        <ActionBar />
       </Grid>
     </ThemeProvider>
   );
