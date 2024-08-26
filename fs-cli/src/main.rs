@@ -31,8 +31,9 @@ fn main() {
                             "{}, {}, {}, {}, {}",
                             path_parts.join("/"),
                             extension,
-                            line,
-                            char,
+                            // TODO: ファイルが utf-8 ではなかった場合0を返すようにしているが、本当に0行のファイルとの見分けがつかないため変更する
+                            line.unwrap_or(0),
+                            char.unwrap_or(0),
                             size
                         );
                         println!("{}", content);
