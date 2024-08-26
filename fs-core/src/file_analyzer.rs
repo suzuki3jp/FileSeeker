@@ -28,8 +28,17 @@ impl FileAnalyzer {
     pub fn analyze(&self) -> Result<FileAnalysisResult> {
         let path_parts = self.get_file_path_parts();
         let extension = self.get_file_extension().unwrap_or("none").to_string();
-        let (line, char) = self.get_file_line_and_char()?;
         let size = self.get_file_size()?;
+
+        // ファイルの内容がutf-8ではなかった場合などでエラー時はNone
+        let result = self.get_file_line_and_char();
+        let mut line = None;
+        let mut char = None;
+        if let Ok(r) = result {
+            let (l, c) = r;
+            line = Some(l);
+            char = Some(c);
+        }
 
         Ok(FileAnalysisResult {
             path_parts,
@@ -82,11 +91,11 @@ pub struct FileAnalysisResult {
     /// 拡張子
     pub extension: String,
 
-    /// ファイルの行数
-    pub line: usize,
+    /// ファイルの行数 ファイルの内容がutf-8ではなかった場合などでエラー時はNone
+    pub line: Option<usize>,
 
-    /// ファイルの文字数
-    pub char: usize,
+    /// ファイルの文字数 ファイルの内容がutf-8ではなかった場合などでエラー時はNone
+    pub char: Option<usize>,
 
     /// ファイルサイズ（バイト単位）
     pub size: u64,
