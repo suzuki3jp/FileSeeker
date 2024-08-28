@@ -23,7 +23,7 @@ export const AnalysisDataTable = (props: AnalysisDataTableProps) => {
             <TableRow>
               <TableCell width={"60%"}>Path</TableCell>
               <TableCell width={"10%"}>Extension</TableCell>
-              <TableCell width={"10%"}>Charactors</TableCell>
+              <TableCell width={"10%"}>characters</TableCell>
               <TableCell width={"10%"}>Lines</TableCell>
               <TableCell width={"10%"}>Size (B)</TableCell>
             </TableRow>
