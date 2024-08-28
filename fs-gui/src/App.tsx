@@ -1,5 +1,9 @@
+import { useState } from "react";
 import { ThemeProvider, createTheme, Grid, CssBaseline } from "@mui/material";
-import { ActionBar } from "./components";
+import { SnackbarProvider } from "notistack";
+
+import { ActionBar, AnalysisDataTable } from "./components";
+import { InvokeAnalyzeResult } from "./typings";
 
 const greyishDarkTheme = createTheme({
   palette: {
@@ -22,13 +26,27 @@ const greyishDarkTheme = createTheme({
 });
 
 function App() {
+  const [analysisResults, setAnalysisResults] = useState<InvokeAnalyzeResult>(
+    []
+  );
+
   return (
-    <ThemeProvider theme={greyishDarkTheme}>
-      <CssBaseline />
-      <Grid container sx={{ padding: "1% 1% 1% 1%" }}>
-        <ActionBar />
-      </Grid>
-    </ThemeProvider>
+    <SnackbarProvider>
+      <ThemeProvider theme={greyishDarkTheme}>
+        <CssBaseline />
+
+        <Grid container sx={{ padding: "1% 1% 1% 1%" }}>
+          <ActionBar
+            results={analysisResults}
+            setResults={setAnalysisResults}
+          />
+          <AnalysisDataTable
+            results={analysisResults}
+            setResults={setAnalysisResults}
+          />
+        </Grid>
+      </ThemeProvider>
+    </SnackbarProvider>
   );
 }
 

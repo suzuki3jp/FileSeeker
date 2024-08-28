@@ -1,3 +1,3 @@
 export * from "./ActionBar";
 
-export { FilePathInput } from "./FilePathInput";
+export * from "./AnalysisDataTable";
