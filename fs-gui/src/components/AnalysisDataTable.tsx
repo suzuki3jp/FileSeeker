@@ -18,14 +18,14 @@ export const AnalysisDataTable = (props: AnalysisDataTableProps) => {
   return (
     <Grid item xs={12}>
       <TableContainer component={Paper} sx={{ marginTop: "2%" }}>
-        <Table size="small">
+        <Table size="small" sx={{ tableLayout: "fixed" }}>
           <TableHead>
             <TableRow>
-              <TableCell>Path</TableCell>
-              <TableCell>Extension</TableCell>
-              <TableCell>Charactors</TableCell>
-              <TableCell>Lines</TableCell>
-              <TableCell>Size (B)</TableCell>
+              <TableCell width={"60%"}>Path</TableCell>
+              <TableCell width={"10%"}>Extension</TableCell>
+              <TableCell width={"10%"}>Charactors</TableCell>
+              <TableCell width={"10%"}>Lines</TableCell>
+              <TableCell width={"10%"}>Size (B)</TableCell>
             </TableRow>
           </TableHead>
           <TableBody>
@@ -41,13 +41,13 @@ export const AnalysisDataTable = (props: AnalysisDataTableProps) => {
 
               return (
                 <TableRow key={path}>
-                  <TableCell component={"th"} scope="cell">
+                  <TableCell component={"th"} scope="cell" width={"60%"}>
                     {path}
                   </TableCell>
-                  <TableCell>{extension}</TableCell>
-                  <TableCell>{char}</TableCell>
-                  <TableCell>{line}</TableCell>
-                  <TableCell>{size}</TableCell>
+                  <TableCell width={"10%"}>{extension}</TableCell>
+                  <TableCell width={"10%"}>{char}</TableCell>
+                  <TableCell width={"10%"}>{line}</TableCell>
+                  <TableCell width={"10%"}>{size}</TableCell>
                 </TableRow>
               );
             })}
