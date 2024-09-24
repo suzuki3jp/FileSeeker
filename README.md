@@ -9,3 +9,5 @@
 - [x] Display file stats (extension, characters, lines, size)
 - [ ] Display the total of the stats for all files
 - [ ] Exclude files by extension
+- [ ] Sort files by stats
+- [ ] Auto update with Github release
